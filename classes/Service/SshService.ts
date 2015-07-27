@@ -41,8 +41,9 @@ var SshService = (function (_super) {
     SshService.prototype.upload = function (filename, remoteFilename) {
         var _this = this;
         var deferred = Q.defer();
-        this.services.log.startSection(sprintf('Uploading "%s" to "%s"', filename, remoteFilename));
+
         this.getScpClient().forEach(function(scpClient){
+            _this.services.log.startSection(sprintf('Uploading "%s" to "%s"', filename, remoteFilename));
             scpClient.upload(filename, remoteFilename, function (procResult) {
                 if (procResult.exitCode !== 0) {
                     deferred.reject(procResult.stderr);
@@ -63,12 +64,23 @@ var SshService = (function (_super) {
             } else {
                 hosts = server.host;
             }
-            this.services.log.logCommand(sprintf('Connecting SSH to %s@%s:%s ...', server.user, hosts, server.port));
+
             hosts.forEach(function(host){
+                var port = host.match('(?:\:)[^\:]*$');
+                host = (''+host).replace(port,'');
+                port = port == null ? server.port : (''+port).replace(':','');
+
+                var user = host.match('^.*?(?=\@)');
+                host = host.replace(user,'');
+                host = host.replace('@','');
+                user = user == null ? server.user : (''+user).replace('@','');
+
+                that.services.log.logCommand(sprintf('Connecting SSH to %s@%s:%s ...', user, host, port));
+
                 that.sshClients.push(new VendorSshClient.SSH({
                         hostname: host,
-                        user: server.user,
-                        port: server.port
+                        user: user,
+                        port: port
                     })
                 );
             });
@@ -86,12 +98,23 @@ var SshService = (function (_super) {
                 hosts = server.host;
             }
 
-            this.services.log.logCommand(sprintf('Connecting SCP to %s@%s:%s ...', server.user, server.host, server.port));
             hosts.forEach(function(host){
+
+                var port = host.match('(?:\:)[^\:]*$');
+                host = (''+host).replace(port,'');
+                port = port == null ? server.port : (''+port).replace(':','');
+
+                var user = host.match('^.*?(?=\@)');
+                host = host.replace(user,'');
+                host = host.replace('@','');
+                user = user == null ? server.user : (''+user).replace('@','');
+
+                that.services.log.logCommand(sprintf('Connecting SCP to %s@%s:%s ...', user, host, port));
+
                 that.scpClients.push(new VendorSshClient.SCP({
                         hostname: host,
-                        user: server.user,
-                        port: server.port
+                        user: user,
+                        port: port
                     })
                 );
             });
