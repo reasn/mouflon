@@ -26,7 +26,7 @@
     "git": "0.1.x",
     "js-yaml": "3.2.x",
     "merge-recursive": "0.0.x",
-    "minimist": "1.1.x",
+    "minimist": "1.2.x",
     "node-sshclient": "0.1.x",
     "q": "1.0.x",
     "rimraf": "2.2.x",
