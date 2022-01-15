@@ -30,7 +30,7 @@
     "node-sshclient": "0.1.x",
     "q": "1.0.x",
     "rimraf": "2.2.x",
-    "shelljs": "0.3.x",
+    "shelljs": "0.8.x",
     "sprintf-js": "1.0.x"
   }
 }
