@@ -6,7 +6,7 @@
   "license": "proprietary",
   "devDependencies": {
     "grunt": "0.4.x",
-    "grunt-contrib-watch": "0.6.x",
+    "grunt-contrib-watch": "1.1.x",
     "grunt-typescript": "0.4.x"
   },
   "main": "./dist/classes/MouflonFactory",
